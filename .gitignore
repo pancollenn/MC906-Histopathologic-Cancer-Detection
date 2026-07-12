@@ -2,5 +2,3 @@ venv
 .venv
 .kaggle
 mc906_env
-modelo_baseline_full.pth
-explaining.md
