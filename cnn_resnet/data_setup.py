@@ -43,7 +43,6 @@ class HistopathologicDataset(Dataset):
         return len(self.dataframe)
 
     def __getitem__(self, idx):
-        # O Kaggle fornece os IDs sem a extensão, então adicionamos '.tif'
         img_name = self.dataframe.iloc[idx, 0] + '.tif'
         img_path = os.path.join(self.img_dir, img_name)
         
@@ -119,7 +118,7 @@ def create_dataloaders(data_dir, batch_size=64, num_workers=2, mode="full"):
     val_dataset = HistopathologicDataset(dataframe=df_val, img_dir=train_dir, transform=val_transforms)
 
     # 7. Criação dos DataLoaders
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, pin_memory=True, prefetch_factor=4)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, pin_memory=True, prefetch_factor=4)
 
     return train_loader, val_loader

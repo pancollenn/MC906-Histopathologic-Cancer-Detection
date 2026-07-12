@@ -22,7 +22,7 @@ def main():
     MODE = 'full'           # Escolha entre: 'full' (100% dos dados) ou 'proto' (5% dos dados para teste)
     
     NUM_EPOCHS = 10
-    BATCH_SIZE = 64
+    BATCH_SIZE = 1024
     LEARNING_RATE = 0.001
 
     data_setup.set_seed(42)  
@@ -43,7 +43,7 @@ def main():
     train_loader, val_loader = data_setup.create_dataloaders(
         data_dir=DATA_DIR,
         batch_size=BATCH_SIZE,
-        num_workers=2,
+        num_workers=6,
         mode=MODE
     )
 
