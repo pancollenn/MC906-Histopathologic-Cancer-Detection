@@ -78,6 +78,25 @@ def plotar_historico(historico, save_dir=None, prefix=""):
     plt.show()
 
 
+def collect_predictions(model, dataloader, device):
+    """Return thresholded CNN predictions and their ordered validation targets."""
+    model.eval()
+    todas_previsoes = []
+    todos_labels = []
+
+    with torch.no_grad():
+        for images, labels in dataloader:
+            images = images.to(device)
+            labels = labels.to(device).float().view(-1, 1)
+            outputs = model(images)
+            probs = torch.sigmoid(outputs).cpu().numpy()
+            preds = (probs >= 0.5).astype(float)
+            todas_previsoes.extend(preds)
+            todos_labels.extend(labels.cpu().numpy())
+
+    return np.asarray(todas_previsoes).flatten(), np.asarray(todos_labels).flatten()
+
+
 def avaliar_modelo(model, dataloader, criterion, device, save_dir=None, prefix=""):
     """
     Avalia o modelo, plota a Matriz de Confusão/Curva ROC e salva em disco.
