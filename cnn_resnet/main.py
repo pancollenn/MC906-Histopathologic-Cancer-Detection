@@ -24,6 +24,7 @@ def main():
     NUM_EPOCHS = 10
     BATCH_SIZE = 64
     LEARNING_RATE = 0.001
+    PLOT_EXAMPLES = False
 
     data_setup.set_seed(42)  
 
@@ -98,7 +99,7 @@ def main():
         device,
         save_dir=PASTA_GRAFICOS,
         prefix=PREFIXO,
-        plot_examples=True,
+        plot_examples=PLOT_EXAMPLES,
     )
 
     nome_arquivo = f"modelo_{MODEL_TYPE}_{MODE}.pth"

@@ -499,6 +499,10 @@ def train_and_compare_models(
         "validation_ids": loaders["image_val"].dataset.dataframe.iloc[:, 0]
         .astype(str)
         .to_numpy(),
+        # Kept so train_all_models can build a paired FFT + image dataset after
+        # each base model finishes its independent training.
+        "fft_train_loader": loaders["fft_train"],
+        "fft_val_loader": loaders["fft_val"],
     }
 
 if __name__ == "__main__":
@@ -507,5 +511,5 @@ if __name__ == "__main__":
         mode="full",
         epochs=3,
         learning_rate=1e-2,
-        plot_examples=True,
+        plot_examples=False,
     )
