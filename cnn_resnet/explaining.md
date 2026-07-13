@@ -278,3 +278,96 @@ Gráfico de avaliação salvo em: cnn_resnet/plots\resnet_proto_avaliacao.png
 
 Modelo salvo com sucesso: modelo_resnet_proto.pth
 ```
+
+# pro resnet sem/com SSL:
+```bash
+Caminho do Dataset: C:\Users\ferna\.cache\kagglehub\competitions\histopathologic-cancer-detection
+==================================================
+INICIANDO PROJETO | Dispositivo: cuda
+Modelo: RESNET | Modo: PROTO | Épocas: 10 | SSL: False
+==================================================
+
+Carregando os dados...
+Modo Prototipagem ativado: Reduzindo dataset para 5%...
+Total de imagens processadas -> Treino: 9900 | Validação: 1101
+
+Construindo modelo resnet...
+
+Iniciando motor de treinamento...
+Iniciando o treinamento no dispositivo: cuda
+Época 01/10 | Train Loss: 0.7035 | Train Acc: 0.7124 || Val Loss: 9.0863 | Val Acc: 0.4905 | Val AUC: 0.2301                                                                                                      
+Época 02/10 | Train Loss: 0.4294 | Train Acc: 0.8138 || Val Loss: 1.8121 | Val Acc: 0.5985 | Val AUC: 0.8561                                                                                                      
+Época 03/10 | Train Loss: 0.3848 | Train Acc: 0.8343 || Val Loss: 0.6561 | Val Acc: 0.7902 | Val AUC: 0.8932                                                                                                      
+Época 04/10 | Train Loss: 0.3622 | Train Acc: 0.8436 || Val Loss: 0.4212 | Val Acc: 0.8256 | Val AUC: 0.9076                                                                                                      
+Época 05/10 | Train Loss: 0.3438 | Train Acc: 0.8534 || Val Loss: 0.3563 | Val Acc: 0.8520 | Val AUC: 0.9163                                                                                                      
+Época 06/10 | Train Loss: 0.3291 | Train Acc: 0.8592 || Val Loss: 0.3382 | Val Acc: 0.8456 | Val AUC: 0.9226                                                                                                      
+Época 07/10 | Train Loss: 0.3263 | Train Acc: 0.8599 || Val Loss: 0.3683 | Val Acc: 0.8302 | Val AUC: 0.9214                                                                                                      
+Época 08/10 | Train Loss: 0.3131 | Train Acc: 0.8675 || Val Loss: 0.3364 | Val Acc: 0.8492 | Val AUC: 0.9284                                                                                                      
+Época 09/10 | Train Loss: 0.3038 | Train Acc: 0.8709 || Val Loss: 0.3648 | Val Acc: 0.8538 | Val AUC: 0.9281                                                                                                      
+Época 10/10 | Train Loss: 0.2955 | Train Acc: 0.8760 || Val Loss: 0.6265 | Val Acc: 0.7938 | Val AUC: 0.9157                                                                                                      
+Treinamento concluído!
+
+Gerando gráficos e métricas...
+Gráfico de histórico salvo em: cnn_resnet/plots\resnet_proto_historico.png
+Iniciando avaliação...
+                                                                                                                                                                                                                  
+========================================
+🩺 RESULTADOS DA AVALIAÇÃO
+========================================
+Loss Média: 0.6265
+Acurácia:   0.7938 (79.38%)
+ROC-AUC:    0.9157
+========================================
+Gráfico de avaliação salvo em: cnn_resnet/plots\resnet_proto_avaliacao.png
+
+Modelo salvo com sucesso: modelo_resnet_proto.pth
+Caminho do Dataset: C:\Users\ferna\.cache\kagglehub\competitions\histopathologic-cancer-detection
+==================================================
+INICIANDO PROJETO | Dispositivo: cuda
+Modelo: RESNET | Modo: PROTO | Épocas: 10 | SSL: True
+==================================================
+
+Carregando os dados...
+Modo Prototipagem ativado: Reduzindo dataset para 5%...
+Total de imagens processadas -> Treino: 9900 | Validação: 1101
+
+Construindo modelo resnet...
+
+>>> INICIANDO FASE SSL: Pré-treinamento SimCLR <<<
+Época SSL 01/5 | Loss SimCLR: 6.8037                                                                                                                                                                              
+Época SSL 02/5 | Loss SimCLR: 6.4412                                                                                                                                                                              
+Época SSL 03/5 | Loss SimCLR: 6.3556                                                                                                                                                                              
+Época SSL 04/5 | Loss SimCLR: 6.3270                                                                                                                                                                              
+Época SSL 05/5 | Loss SimCLR: 6.2988                                                                                                                                                                              
+>>> FASE SSL CONCLUÍDA. Iniciando Fine-Tuning supervisionado... <<<
+
+
+Iniciando motor de treinamento...
+Iniciando o treinamento no dispositivo: cuda
+Época 1/10 [Validação]:  50%|███████████████████████████████████████████████████████████████████████████▌                                                                                   | 0/2 [00:00<?, ?it/s]                                                                                                                                                           Época 01/10 | Train Loss: 0.5440 | Train Acc: 0.7362 || Val Loss: 1.0994 | Val Acc: 0.7266 | Val AUC: 0.8597
+Época 02/10 | Train Loss: 0.4047 | Train Acc: 0.8247 || Val Loss: 0.4857 | Val Acc: 0.8084 | Val AUC: 0.8613                                              
+Época 03/10 | Train Loss: 0.3660 | Train Acc: 0.8409 || Val Loss: 0.4342 | Val Acc: 0.8247 | Val AUC: 0.9140                                              
+Época 04/10 | Train Loss: 0.3489 | Train Acc: 0.8455 || Val Loss: 0.3998 | Val Acc: 0.8420 | Val AUC: 0.9170                                              
+Época 05/10 | Train Loss: 0.3436 | Train Acc: 0.8515 || Val Loss: 0.4089 | Val Acc: 0.8365 | Val AUC: 0.9151                                              
+Época 06/10 | Train Loss: 0.3271 | Train Acc: 0.8626 || Val Loss: 0.4471 | Val Acc: 0.8220 | Val AUC: 0.9191                                              
+Época 07/10 | Train Loss: 0.3163 | Train Acc: 0.8667 || Val Loss: 0.3387 | Val Acc: 0.8501 | Val AUC: 0.9292                                              
+Época 08/10 | Train Loss: 0.3075 | Train Acc: 0.8724 || Val Loss: 0.4656 | Val Acc: 0.8102 | Val AUC: 0.9208                                              
+Época 09/10 | Train Loss: 0.3035 | Train Acc: 0.8715 || Val Loss: 0.3736 | Val Acc: 0.8574 | Val AUC: 0.9296                                              
+Época 10/10 | Train Loss: 0.2971 | Train Acc: 0.8709 || Val Loss: 0.3494 | Val Acc: 0.8619 | Val AUC: 0.9263                                              
+Treinamento concluído!
+
+Gerando gráficos e métricas...
+Gráfico de histórico salvo em: cnn_resnet/plots\resnet_proto_ssl_historico.png
+Iniciando avaliação...
+                                                                                                                                                          
+========================================
+🩺 RESULTADOS DA AVALIAÇÃO
+========================================
+Loss Média: 0.3494
+Acurácia:   0.8619 (86.19%)
+ROC-AUC:    0.9263
+========================================
+Gráfico de avaliação salvo em: cnn_resnet/plots\resnet_proto_ssl_avaliacao.png
+
+Modelo salvo com sucesso: modelo_resnet_proto_ssl.pth
+```
