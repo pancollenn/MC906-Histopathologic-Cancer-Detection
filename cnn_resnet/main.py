@@ -91,7 +91,15 @@ def main():
     
     # Agora as funções criarão a pasta e salvarão as imagens em alta qualidade
     evaluate.plotar_historico(historico, save_dir=PASTA_GRAFICOS, prefix=PREFIXO)
-    metricas = evaluate.avaliar_modelo(modelo_treinado, val_loader, criterion, device, save_dir=PASTA_GRAFICOS, prefix=PREFIXO)
+    metricas = evaluate.avaliar_modelo(
+        modelo_treinado,
+        val_loader,
+        criterion,
+        device,
+        save_dir=PASTA_GRAFICOS,
+        prefix=PREFIXO,
+        plot_examples=True,
+    )
 
     nome_arquivo = f"modelo_{MODEL_TYPE}_{MODE}.pth"
     torch.save(modelo_treinado.state_dict(), nome_arquivo)

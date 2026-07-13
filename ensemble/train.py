@@ -4,6 +4,7 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as plt
 from PIL import Image
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
@@ -340,6 +341,46 @@ def evaluate_model(model, data_loader, device=None):
     }
 
 
+def plot_prediction_examples(data_loader, predictions, targets, model_name):
+    """Plot one TP, FP, FN, and TN validation crop for a feature model."""
+    predictions = np.asarray(predictions)
+    targets = np.asarray(targets)
+    if predictions.shape != targets.shape:
+        raise ValueError("Predictions and targets must have the same shape")
+
+    example_types = (
+        ("True positive", 1, 1),
+        ("False positive", 0, 1),
+        ("False negative", 1, 0),
+        ("True negative", 0, 0),
+    )
+    class_names = {0: "Normal", 1: "Tumor"}
+    dataset = data_loader.dataset
+    fig, axes = plt.subplots(2, 2, figsize=(8, 8))
+
+    for axis, (label, actual, predicted) in zip(axes.flat, example_types):
+        matches = np.flatnonzero((targets == actual) & (predictions == predicted))
+        if not len(matches):
+            axis.set_title(f"{label}\nNo validation example")
+            axis.axis("off")
+            continue
+
+        idx = int(matches[0])
+        image = dataset._prepare_crop(dataset._load_image(idx))
+        image_id = dataset.dataframe.iloc[idx, 0]
+        axis.imshow(image)
+        axis.set_title(
+            f"{label}\nActual: {class_names[actual]} | "
+            f"Predicted: {class_names[predicted]}\nID: {image_id}"
+        )
+        axis.axis("off")
+
+    fig.suptitle(f"{model_name}: validation prediction examples", fontsize=14)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    plt.show()
+    return fig
+
+
 def calculate_yules_q(first_predictions, second_predictions, targets):
     """Measure association between two models' validation-set mistakes.
 
@@ -382,6 +423,7 @@ def train_and_compare_models(
     epochs=5,
     learning_rate=1e-3,
     weight_decay=1e-6,
+    plot_examples=False,
     device=None,
 ):
     """Train both dense feature models and compare their validation metrics."""
@@ -425,6 +467,11 @@ def train_and_compare_models(
     error_association = calculate_yules_q(
         image_predictions, fft_predictions, image_targets
     )
+    if plot_examples:
+        plot_prediction_examples(
+            loaders["image_val"], image_predictions, image_targets, "Image statistics"
+        )
+        plot_prediction_examples(loaders["fft_val"], fft_predictions, fft_targets, "FFT")
 
     print("\nModel comparison")
     print(f"{'Model':<20} {'Accuracy':<10} {'Precision':<10} {'Recall':<10} {'F1':<10} {'Loss':<10}")
@@ -455,4 +502,10 @@ def train_and_compare_models(
     }
 
 if __name__ == "__main__":
-    results = train_and_compare_models(batch_size=64, mode="full", epochs=3, learning_rate=1e-2)
+    results = train_and_compare_models(
+        batch_size=64,
+        mode="full",
+        epochs=3,
+        learning_rate=1e-2,
+        plot_examples=True,
+    )

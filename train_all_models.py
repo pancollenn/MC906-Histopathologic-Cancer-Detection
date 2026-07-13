@@ -29,11 +29,12 @@ def train_and_compare_all_models(
     epochs=5,
     learning_rate=1e-3,
     weight_decay=1e-6,
-    cnn_model_type="baseline",
+    cnn_model_type="resnet",
     cnn_epochs=None,
     cnn_learning_rate=1e-3,
     cnn_weight_decay=1e-6,
     cnn_num_workers=2,
+    plot_examples=True,
     device=None,
 ):
     """Train image-statistics, FFT, and CNN models and compare their errors.
@@ -57,6 +58,7 @@ def train_and_compare_all_models(
         epochs=epochs,
         learning_rate=learning_rate,
         weight_decay=weight_decay,
+        plot_examples=plot_examples,
         device=device,
     )
 
@@ -97,6 +99,8 @@ def train_and_compare_all_models(
         raise RuntimeError("Validation image IDs are not aligned between CNN and feature models")
     if not np.array_equal(feature_results["validation_targets"], cnn_targets):
         raise RuntimeError("Validation targets are not aligned between CNN and feature models")
+    if plot_examples:
+        cnn_evaluate.plot_prediction_examples(cnn_val_loader, cnn_predictions, cnn_targets)
 
     image_cnn_q = calculate_yules_q(
         feature_results["image_predictions"], cnn_predictions, cnn_targets
@@ -119,4 +123,4 @@ def train_and_compare_all_models(
 
 
 if __name__ == "__main__":
-    train_and_compare_all_models(mode="full", epochs=5)
+    train_and_compare_all_models(mode="proto", epochs=5)
