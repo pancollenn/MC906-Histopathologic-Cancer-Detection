@@ -1,5 +1,7 @@
 """Train the handcrafted-feature models and CNN on one shared validation split."""
 
+import os
+
 import kagglehub
 import numpy as np
 import torch
@@ -227,7 +229,7 @@ def train_and_compare_all_models(
     cnn_epochs=None,
     cnn_learning_rate=1e-3,
     cnn_weight_decay=1e-6,
-    cnn_num_workers=2,
+    cnn_num_workers=None,
     ensemble_epochs=None,
     ensemble_learning_rate=1e-3,
     ensemble_weight_decay=1e-6,
@@ -251,6 +253,8 @@ def train_and_compare_all_models(
         ensemble_epochs = epochs
     if cnn_model_type not in {"baseline", "resnet"}:
         raise ValueError("cnn_model_type must be 'baseline' or 'resnet'")
+    if cnn_num_workers is None:
+        cnn_num_workers = os.cpu_count() or 1
 
     _print_experiment_header(
         mode,
@@ -376,9 +380,9 @@ def train_and_compare_all_models(
     ensemble_cnn_q = calculate_yules_q(ensemble_predictions, cnn_predictions, cnn_targets)
     cnn_metrics = {
         **_classification_metrics(cnn_predictions, cnn_targets),
-        "train_loss": cnn_history[-1]["train_loss"] if cnn_history else None,
-        "val_loss": cnn_history[-1]["val_loss"] if cnn_history else None,
-        "auc": cnn_history[-1]["val_auc"] if cnn_history else None,
+        "train_loss": cnn_history["train_loss"][-1] if cnn_history["train_loss"] else None,
+        "val_loss": cnn_history["val_loss"][-1] if cnn_history["val_loss"] else None,
+        "auc": cnn_history["val_auc"][-1] if cnn_history["val_auc"] else None,
     }
     ensemble_report_metrics = {
         **ensemble_metrics,
@@ -441,4 +445,4 @@ def train_and_compare_all_models(
 
 
 if __name__ == "__main__":
-    train_and_compare_all_models(mode="full", epochs=5)
+    train_and_compare_all_models(mode="proto", epochs=5, cnn_epochs=5, ensemble_epochs=5)

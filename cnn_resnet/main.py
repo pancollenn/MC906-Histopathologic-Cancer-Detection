@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -24,6 +26,7 @@ def main():
     NUM_EPOCHS = 10
     BATCH_SIZE = 64
     LEARNING_RATE = 0.001
+    NUM_WORKERS = os.cpu_count() or 1
     PLOT_EXAMPLES = False
 
     data_setup.set_seed(42)  
@@ -44,7 +47,7 @@ def main():
     train_loader, val_loader = data_setup.create_dataloaders(
         data_dir=DATA_DIR,
         batch_size=BATCH_SIZE,
-        num_workers=2,
+        num_workers=NUM_WORKERS,
         mode=MODE
     )
 
