@@ -20,7 +20,7 @@ def main():
     DATA_DIR = kagglehub.competition_download('histopathologic-cancer-detection')
     print(f"Caminho do Dataset: {DATA_DIR}")
     
-    MODEL_TYPE = 'baseline'  # Escolha entre: 'baseline' ou 'resnet'
+    MODEL_TYPE = 'resnet'  # Escolha entre: 'baseline' ou 'resnet'
     MODE = 'full'           # Escolha entre: 'full' (100% dos dados) ou 'proto' (5% dos dados para teste)
     
     NUM_EPOCHS = 10
