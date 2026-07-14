@@ -78,7 +78,72 @@ def plotar_historico(historico, save_dir=None, prefix=""):
     plt.show()
 
 
-def avaliar_modelo(model, dataloader, criterion, device, save_dir=None, prefix=""):
+def collect_predictions(model, dataloader, device):
+    """Return thresholded CNN predictions and their ordered validation targets."""
+    model.eval()
+    todas_previsoes = []
+    todos_labels = []
+
+    with torch.no_grad():
+        for images, labels in dataloader:
+            images = images.to(device)
+            labels = labels.to(device).float().view(-1, 1)
+            outputs = model(images)
+            probs = torch.sigmoid(outputs).cpu().numpy()
+            preds = (probs >= 0.5).astype(float)
+            todas_previsoes.extend(preds)
+            todos_labels.extend(labels.cpu().numpy())
+
+    return np.asarray(todas_previsoes).flatten(), np.asarray(todos_labels).flatten()
+
+
+def plot_prediction_examples(dataloader, predictions, targets, model_name="CNN"):
+    """Plot one TP, FP, FN, and TN validation image for a CNN."""
+    predictions = np.asarray(predictions)
+    targets = np.asarray(targets)
+    if predictions.shape != targets.shape:
+        raise ValueError("Predictions and targets must have the same shape")
+
+    example_types = (
+        ("True positive", 1, 1),
+        ("False positive", 0, 1),
+        ("False negative", 1, 0),
+        ("True negative", 0, 0),
+    )
+    class_names = {0: "Normal", 1: "Tumor"}
+    dataset = dataloader.dataset
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    fig, axes = plt.subplots(2, 2, figsize=(8, 8))
+
+    for axis, (label, actual, predicted) in zip(axes.flat, example_types):
+        matches = np.flatnonzero((targets == actual) & (predictions == predicted))
+        if not len(matches):
+            axis.set_title(f"{label}\nNo validation example")
+            axis.axis("off")
+            continue
+
+        idx = int(matches[0])
+        image, _ = dataset[idx]
+        image = image.permute(1, 2, 0).numpy()
+        image = np.clip(image * std + mean, 0, 1)
+        image_id = dataset.dataframe.iloc[idx, 0]
+        axis.imshow(image)
+        axis.set_title(
+            f"{label}\nActual: {class_names[actual]} | "
+            f"Predicted: {class_names[predicted]}\nID: {image_id}"
+        )
+        axis.axis("off")
+
+    fig.suptitle(f"{model_name}: validation prediction examples", fontsize=14)
+    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    plt.show()
+    return fig
+
+
+def avaliar_modelo(
+    model, dataloader, criterion, device, save_dir=None, prefix="", plot_examples=False
+):
     """
     Avalia o modelo, plota a Matriz de Confusão/Curva ROC e salva em disco.
     """
@@ -154,5 +219,8 @@ def avaliar_modelo(model, dataloader, criterion, device, save_dir=None, prefix="
         print(f"Gráfico de avaliação salvo em: {caminho_arquivo}")
         
     plt.show()
+
+    if plot_examples:
+        plot_prediction_examples(dataloader, todas_previsoes, todos_labels)
 
     return {'loss': loss_media, 'accuracy': acuracia, 'roc_auc': roc_auc}

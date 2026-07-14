@@ -58,20 +58,24 @@ class HistopathologicDataset(Dataset):
             
         return image, label
 
-def create_dataloaders(data_dir, batch_size=64, num_workers=2, mode="full"):
+def create_dataloaders(data_dir, batch_size=64, num_workers=None, mode="full"):
     """
     Cria e retorna os DataLoaders de treino e validação.
     
     Args:
         data_dir (str): Caminho raiz onde estão a pasta 'train' e o 'train_labels.csv'.
         batch_size (int): Tamanho do lote.
-        num_workers (int): Número de subprocessos para carregamento de dados.
+        num_workers (int | None): Número de subprocessos para carregamento de
+            dados. Quando None, usa todos os CPUs lógicos disponíveis.
         mode (str): "full" para usar todo o dataset, "proto" para usar apenas 5% (modo prototipagem).
         
     Returns:
         train_loader, val_loader: Dataloaders do PyTorch.
     """
     
+    if num_workers is None:
+        num_workers = os.cpu_count() or 1
+
     # 1. Caminhos
     train_dir = os.path.join(data_dir, 'train')
     csv_path = os.path.join(data_dir, 'train_labels.csv')

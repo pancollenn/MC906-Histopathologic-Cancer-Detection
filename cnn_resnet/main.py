@@ -1,3 +1,5 @@
+import os
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -24,6 +26,8 @@ def main():
     NUM_EPOCHS = 10
     BATCH_SIZE = 64
     LEARNING_RATE = 0.001
+    NUM_WORKERS = os.cpu_count() or 1
+    PLOT_EXAMPLES = False
 
     data_setup.set_seed(42)  
 
@@ -43,7 +47,7 @@ def main():
     train_loader, val_loader = data_setup.create_dataloaders(
         data_dir=DATA_DIR,
         batch_size=BATCH_SIZE,
-        num_workers=2,
+        num_workers=NUM_WORKERS,
         mode=MODE
     )
 
@@ -91,7 +95,15 @@ def main():
     
     # Agora as funções criarão a pasta e salvarão as imagens em alta qualidade
     evaluate.plotar_historico(historico, save_dir=PASTA_GRAFICOS, prefix=PREFIXO)
-    metricas = evaluate.avaliar_modelo(modelo_treinado, val_loader, criterion, device, save_dir=PASTA_GRAFICOS, prefix=PREFIXO)
+    metricas = evaluate.avaliar_modelo(
+        modelo_treinado,
+        val_loader,
+        criterion,
+        device,
+        save_dir=PASTA_GRAFICOS,
+        prefix=PREFIXO,
+        plot_examples=PLOT_EXAMPLES,
+    )
 
     nome_arquivo = f"modelo_{MODEL_TYPE}_{MODE}.pth"
     torch.save(modelo_treinado.state_dict(), nome_arquivo)
