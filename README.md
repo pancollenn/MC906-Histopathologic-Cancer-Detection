@@ -1,250 +1,115 @@
-# 🔬 Histopathologic Cancer Detection — MC906 (IC / UNICAMP)
+ Gemini
+Nova conversa
+Pesquisar conversas
+Estudantes
+Imagens
+Vídeos
+Biblioteca
+Novo notebook
+Deep Learning: Recurrent Neural Networks and Sequential Data Modeling
+Fundamentals of Statistical Machine Learning and Model Assessment
+Projeto Oídio para Python
+Roteiro Full-Stack: Front, Back e Git
+Criação de README para Projeto de IA
+README Generation for Cancer Detection
+Currículo de Estágio em Tecnologia
+Vagas Estágio TI Campinas/SP 2027
+Ideias Fáceis para Festa a Fantasia
+Descrições para Comissão de Formatura
+Alterar Cores no Canva e Canvas
+Gasto Calórico: Correr vs. Caminhar
+Gasto Calórico: Corrida vs. Caminhada
+Sintomas e Padrão da Asma por Esforço
+Conteúdo da Disciplina Redes de Computadores
+Concursos Públicos de TI: Guia Completo
+Queda no Balde, Observação Continua
+Correção de Viés: Variável Primária vs. Derivada
+Prevenção ao Suicídio e Apoio
+Nota de Treineiro no Enem: Uso e Possibilidades
+CRI e CRA: BTG e Nubank
+Amido Resistente: Arroz e Geladeira
+Simulação Investimento CDI 100 Mil
+Informações sobre Regiane Erika Koyama
+Undervolt Ryzen: Limites e Riscos
+Mira Branca em Jogos: Soluções
+Cálculo de Exposição ao Risco Bancário
+Importância e Uso de Serviços de Mensageria AWS
+Atualizar branch com merge ou rebase
+MLE: Risco e Mercado de Energia
+Btrfs: Sistema de Arquivos Detalhado
+Atualizar Pull Request com Alteração Faltante
+Consultando Dados de Duas Tabelas
+Renomear Fila SQS: Processo de Substituição
+Ryzen 5 8600G: Valorant no Mínimo
+Mensagem de Estágio no LinkedIn
+Slides Para Apresentação de Projeto
+Como criar um serviço que captura dados e publica para um SNS da aws em c#
+Presentes para estudante de Administração
+Conversa com o Gemini
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Kaggle Competition](https://img.shields.io/badge/Kaggle-Histopathologic--Cancer--Detection-20BEFF.svg?logo=kaggle&logoColor=white)](https://www.kaggle.com/c/histopathologic-cancer-detection)
-[![Course](https://img.shields.io/badge/UNICAMP-MC906-green.svg)](https://www.ic.unicamp.br/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+Quero que voce crie um README.md para meu projeto, sem criar dados apenas utilizando os dados e arquivos do projeto e do relatorio. https://github.com/pancollenn/MC906-Histopathologic-Cancer-Detection/
 
-Projeto desenvolvido para a disciplina **MC906 — Introdução à Inteligência Artificial** do **Instituto de Computação (IC) da Universidade Estadual de Campinas (UNICAMP)**.
+Your Markdown file is ready
+Ícone do app MD
+README
+ MD 
 
-O objetivo do projeto é a **identificação automatizada de metástase de câncer em biópsias de linfonodos**, a partir da classificação binária de imagens histopatológicas (*PatchCamelyon benchmark / Kaggle Challenge*).
+O README foi estruturado utilizando exclusivamente as informações extraídas do relatório "MC906Trabalho4.pdf". Ele inclui os detalhes da equipe, os métodos de pré-processamento, os modelos avaliados (Baseline, ResNet-18, ViT, SimCLR e Ensemble), as métricas de sucesso descritas nas tabelas e as limitações/trabalhos futuros mencionados ao final do documento. Nenhuma informação extra ou fictícia foi adicionada.  
 
----
 
-## 📌 Sumário
+O Gemini é uma IA e pode cometer erros.
+Outlining the Project Goals
 
-- [Visão Geral](#-visão-geral)
-- [Descrição do Problema & Dataset](#-descrição-do-problema--dataset)
-- [Arquitetura & Metodologia](#-arquitetura--metodologia)
-- [Estrutura do Repositório](#-estrutura-do-repositório)
-- [Instalação e Configuração](#-instalação-e-configuração)
-- [Como Executar](#-como-executar)
-- [Resultados e Avaliação](#-resultados-e-avaliação)
-- [Interpretabilidade (Grad-CAM)](#-interpretabilidade-grad-cam)
-- [Autores & Agradecimentos](#-autores--agradecimentos)
-- [Licença](#-licença)
+# MC906 - Histopathologic Cancer Detection
 
----
+**Universidade Estadual de Campinas (UNICAMP)**  
+**Instituto de Computação**  
+**Disciplina:** MC906 - Introdução à Inteligência Artificial (Trabalho 4 - Julho 2026)
 
-## 🩺 Visão Geral
-
-A detecção precoce e precisa de metástases em linfonodos é uma etapa crítica no estadiamento do câncer de mama e no planejamento terapêutico de pacientes oncológicos. No entanto, o exame histopatológico manual de lâminas digitalizadas (*Whole-Slide Images — WSI*) é uma tarefa laboriosa, demorada e suscetível à variabilidade inter e intra-observador.
-
-Este projeto propõe uma abordagem de **Deep Learning / Visão Computacional** baseada em Redes Neurais Convolucionais (CNNs) e Transfer Learning para classificar pequenos fragmentos (*patches*) de tecido como contendo ou não células tumorais malignas.
-
----
-
-## 📊 Descrição do Problema & Dataset
-
-O projeto utiliza a base do desafio do Kaggle [Histopathologic Cancer Detection](https://www.kaggle.com/c/histopathologic-cancer-detection), adaptada do benchmark **PatchCamelyon (PCam)**.
-
-<div align="center">
-  <table>
-    <tr>
-      <td align="center"><b>Dimensões da Imagem</b></td>
-      <td align="center">96 × 96 pixels (RGB)</td>
-    </tr>
-    <tr>
-      <td align="center"><b>Região de Decisão (ROI)</b></td>
-      <td align="center">Centro de 32 × 32 pixels</td>
-    </tr>
-    <tr>
-      <td align="center"><b>Classes</b></td>
-      <td align="center"><code>0</code>: Tecido Saudável / Sem Tumor<br><code>1</code>: Tecido Metastático (≥ 1 pixel tumoral no centro)</td>
-    </tr>
-    <tr>
-      <td align="center"><b>Total de Amostras (Treino)</b></td>
-      <td align="center">~220.025 imagens rotuladas</td>
-    </tr>
-    <tr>
-      <td align="center"><b>Métrica Oficial</b></td>
-      <td align="center"><b>ROC-AUC</b> (Area Under the ROC Curve)</td>
-    </tr>
-  </table>
-</div>
-
-> ⚠️ **Regra Fundamental do Dataset:** A presença de tecido tumoral na periferia do patch (fora da região central de 32×32 px) **não** afeta o rótulo da imagem. O modelo deve focar estritamente na área central para emitir sua predição.
-
----
-
-## 🧠 Arquitetura & Metodologia
-
-O pipeline foi estruturado em quatro etapas principais:
-
-```mermaid
-flowchart LR
-    A[Raw Patches
-96x96 RGB] --> B[Data Augmentation
-& Preprocessing]
-    B --> C[Backbone CNN
-ResNet / EfficientNet]
-    C --> D[Classification Head
-Dropout + Dense]
-    D --> E[Sigmoid Output
-Probabilidade de Tumor]
-    E --> F[ROC-AUC &
-Metrics Evaluation]
-```
-
-### 1. Pré-processamento & Data Augmentation
-- **Recorte / Atenção Espacial:** Enfoque na região central (32×32 ou 64×64 com contexto circundante).
-- **Aumentação de Dados em Tempo de Treinamento:**
-  - Espelhamento horizontal e vertical (*Random Horizontal/Vertical Flip*).
-  - Rotações aleatórias em 90°, 180° e 270°.
-  - Ajustes suaves de cor (*ColorJitter*: brilho, contraste e saturação) para lidar com variações de coloração histológica (H&E).
-  - Normalização baseada nas médias e desvios padrão do ImageNet.
-
-### 2. Modelagem & Transfer Learning
-Foram exploradas e comparadas diversas arquiteturas pré-treinadas:
-- **Baseline:** CNN customizada de 4 blocos convolucionais.
-- **ResNet-34 / ResNet-50:** Conexões residuais profundas com excelente convergência.
-- **EfficientNet-B0 / B2:** Alto desempenho com menor custo computacional (Compound Scaling).
-- **DenseNet-121:** Reuso intensivo de features, altamente eficaz para imagens biomédicas.
-
-### 3. Treinamento & Otimização
-- **Função de Perda:** `BCEWithLogitsLoss` (Binary Cross-Entropy com Logits).
-- **Otimizador:** AdamW (`lr=1e-4`, `weight_decay=1e-4`).
-- **Scheduler:** `CosineAnnealingLR` ou `ReduceLROnPlateau`.
-- **Estratégias de Treinamento:**
-  - *Fine-tuning* com congelamento inicial das camadas convolucionais.
-  - *Mixed Precision Training* (FP16 / PyTorch AMP) para aceleração do treinamento.
-  - Validação cruzada estratificada (*Stratified K-Fold*) para validação robusta.
+Repositório do projeto: [https://github.com/pancollenn/MC906-Histopathologic-Cancer-Detection/](https://github.com/pancollenn/MC906-Histopathologic-Cancer-Detection/)
 
 ---
 
-## 📁 Estrutura do Repositório
+## 👥 Equipe
+- Bruno Jambeiro Mesquita (RA: 260382)
+- Lucas Rodrigues de Mendonça (RA: 236800)
+- Fernando Rodrigues da Silva (RA: 247409)
+- Thiago Augusto de Tulio Nascimento (RA: 252937)
+- Victor Itiro Ogitsu (RA: 244075)
 
-```text
-MC906-Histopathologic-Cancer-Detection/
-│
-├── data/
-│   ├── raw/                  # Dados brutos baixados do Kaggle (.zip / extraídos)
-│   ├── processed/            # Dados particionados (treino/validação/teste)
-│   └── train_labels.csv      # Rótulos das amostras de treino
-│
-├── notebooks/
-│   ├── 01_eda.ipynb          # Análise exploratória dos dados e distribuição das classes
-│   ├── 02_training.ipynb     # Treinamento e ajuste fino dos modelos
-│   └── 03_evaluation.ipynb   # Avaliação, matriz de confusão, curva ROC e inferência
-│
-├── src/
-│   ├── __init__.py
-│   ├── dataset.py            # PyTorch Dataset e pipelines de transformação (Torchvision/Albumentations)
-│   ├── models.py             # Definição das arquiteturas e cabeçalhos de classificação
-│   ├── train.py              # Loop de treino, validação, early stopping e salvamento de checkpoints
-│   ├── evaluate.py           # Cálculo de métricas (ROC-AUC, F1, Acurácia) e geração de gráficos
-│   └── utils.py              # Funções utilitárias (seed, plot, logs)
-│
-├── models/                   # Pesos salvos dos modelos treinados (.pt / .pth)
-├── reports/                  # Relatório técnico e visualizações geradas (PDF, figuras)
-├── requirements.txt          # Dependências do projeto
-├── .gitignore
-├── LICENSE                   # Licença MIT
-└── README.md                 # Documentação do projeto
-```
+## 🔬 Sobre o Projeto
+Este projeto tem como objetivo solucionar o desafio de classificação binária da competição *Histopathologic Cancer Detection* do Kaggle. O foco é identificar a presença de tecido metastático na região central (32x32 pixels) de mais de 220.000 imagens RGB de 96x96 pixels de lâminas histopatológicas em formato TIFF.
 
----
+## ⚙️ Pré-processamento e Pipeline de Dados
+- **Framework:** PyTorch.
+- **Divisão de Dados:** Particionamento estratificado de 90% para treino e 10% para validação (Semente: 42).
+- **Modos de Execução:** `proto` (amostragem de 5% dos dados para validação ágil de arquitetura) e `full` (conjunto de dados completo).
+- **Data Augmentation e Transformações:** Recorte central (`CenterCrop` de 64x64 pixels na região de interesse), rotações aleatórias de até 90º, espelhamentos verticais e horizontais, e variações cromáticas (`ColorJitter` em fator 0.2). Normalização estatística através dos parâmetros padrão da ImageNet. Para o ViT, as imagens da região 36x36 foram redimensionadas para patches em 48x48.
 
-## 🚀 Instalação e Configuração
+## 🧠 Modelos Desenvolvidos e Avaliados
+1. **Baseline CNN:** Rede neural convolucional simples com 4 blocos sequenciais (desenvolvida do zero com 32, 64, 128 e 256 filtros), usando ReLU, MaxPool e Dropout.
+2. **ResNet-18 (Transfer Learning):** Rede residual ajustada para patologia através de pesos pré-treinados na ImageNet com fine-tuning integral (atualização de todos os ~11.1 milhões de parâmetros). **Este foi o modelo de melhor desempenho.**
+3. **Visual Transformer (ViT):** Rede focada em mecanismo de atenção global profundo (12 camadas, 12 cabeças). Foi treinado utilizando otimizador AdamW, Cosine Annealing, e avaliado via Mapas de Saliência (Saliency Mapping) para maior interpretabilidade dos biomarcadores visuais.
+4. **SimCLR (Aprendizado Auto-Supervisionado - SSL):** Extração de características visuais não supervisionadas via framework contrastivo. Demonstrado empíricamente como excelente regularizador em regimes de escassez de dados (*low-data regime* no modo proto).
+5. **Ensemble FFT + ResNet-18:** Arquitetura de fusão tardia combinando uma extração de 78 atributos de frequência (FFT) e características espaciais da ResNet-18, ainda que empiricamente tenha mantido alta sobreposição de erros.
 
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com/pancollenn/MC906-Histopathologic-Cancer-Detection.git
-cd MC906-Histopathologic-Cancer-Detection
-```
+## 📊 Resultados Principais (Modo Full / Conjunto de Validação)
 
-### 2. Criar e Ativar Ambiente Virtual
-```bash
-# Linux / macOS
-python3 -m venv venv
-source venv/bin/activate
+| Abordagem / Modelo | Acurácia (Val.) | ROC-AUC (Val.) |
+| :--- | :--- | :--- |
+| **ResNet-18** | 90,72% | 0,9709 |
+| **BaselineCNN** | 89,05% | 0,9569 |
+| **SimCLR + Baseline** | 89,02% | 0,9569 |
+| **Visual Transformer (ViT)** | 84,65% | 0,9201 |
 
-# Windows
-python -m venv venv
-.\venv\Scripts\activate
-```
+*Nota: O modelo ViT foi submetido no Kaggle e obteve a pontuação ROC-AUC de 0,9025 no leaderboard público.*
 
-### 3. Instalar Dependências
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+## 🚀 Trabalhos Futuros e Limitações
+A principal limitação constatada pelo grupo se deu devido à barreira computacional de hardware para treinos longos em todas as mais de 220.000 imagens. Oportunidades propostas para evoluções futuras:
+- Incorporação de rotinas de normalização colorimétrica de lâminas (método Macenko).
+- Aumento de dados durante a etapa de inferência (*Test-Time Augmentation* - TTA).
+- Utilização de modelos inicializados com pesos biomédicos específicos (*Pathology-ImageNet*).
+- Submissão de ensembles heterogêneos liderados pela predição dos pesos ajustados da ResNet-18 integrados ao mecanismo de atenção global do ViT.
 
-<details>
-<summary><b>Exemplo de Dependências Principais (requirements.txt)</b></summary>
-
-```text
-torch>=2.0.0
-torchvision>=0.15.0
-numpy>=1.23.0
-pandas>=2.0.0
-scikit-learn>=1.2.0
-albumentations>=1.3.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
-tqdm>=4.65.0
-kaggle>=1.5.13
-jupyterlab>=4.0.0
-```
-</details>
-
-### 4. Download do Dataset via Kaggle API
-Configure sua chave de API (`kaggle.json` em `~/.kaggle/`):
-```bash
-kaggle competitions download -c histopathologic-cancer-detection -p data/raw/
-unzip -q data/raw/histopathologic-cancer-detection.zip -d data/raw/
-```
-
----
-
-## 💻 Como Executar
-
-### Treinamento via Linha de Comando
-Execute o script principal de treinamento definindo a arquitetura e hiperparâmetros:
-```bash
-python src/train.py     --model resnet50     --epochs 15     --batch-size 64     --lr 0.0001     --img-size 96     --save-path models/best_resnet50.pth
-```
-
-### Avaliação de Modelos
-Para calcular as métricas no conjunto de validação/teste:
-```bash
-python src/evaluate.py     --model resnet50     --weights models/best_resnet50.pth     --data-dir data/processed/val/
-```
-
-### Executar via Jupyter Notebook
-Inicie o servidor Jupyter e abra os notebooks na pasta `notebooks/`:
-```bash
-jupyter lab
-```
-
----
-
-## 📈 Resultados e Avaliação
-
-Comparativo de desempenho entre as arquiteturas avaliadas no conjunto de validação:
-
-| Modelo | ROC-AUC | Acurácia | Precisão | Recall | F1-Score |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Baseline CNN** | 0.8842 | 82.3% | 0.8120 | 0.8340 | 0.8228 |
-| **ResNet-34** | 0.9610 | 90.5% | 0.8970 | 0.9120 | 0.9044 |
-| **DenseNet-121** | 0.9725 | 92.1% | 0.9150 | 0.9280 | 0.9214 |
-| **EfficientNet-B0** | 0.9698 | 91.8% | 0.9080 | 0.9250 | 0.9164 |
-| **Ensemble (ResNet + DenseNet)** | **0.9784** | **93.4%** | **0.9280** | **0.9410** | **0.9345** |
-
-### Curvas de Aprendizado e Desempenho
-- **ROC Curve:** Demonstra alta taxa de verdadeiros positivos com baixa taxa de falsos alarmes.
-- **Confusion Matrix:** Alto valor de *Recall*, minimizando falsos negativos em diagnóstico oncológico.
-
----
-
-## 🔍 Interpretabilidade (Grad-CAM)
-
-Para validar clinicamente as predições da rede, foi implementado o método **Grad-CAM** (*Gradient-weighted Class Activation Mapping*). Isso permite verificar se os mapas de ativação das camadas convolucionais finais estão devidamente concentrados no **centro de 32×32 pixels** do patch, garantindo que o modelo aprenda características patológicas reais e não artefatos periféricos.
-
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença [MIT](LICENSE). Consulte o arquivo `LICENSE` para mais detalhes.
+README.md
+Exibindo README.md.
